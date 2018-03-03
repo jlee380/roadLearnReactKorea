@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import './index.css';
-import './App.css';
 
 const DEFAULT_QUERY = 'redux';
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = 'query=';
 
-
 const isSearched = (searchTerm) => item =>
+
   item.title.toLowerCase().includes(searchTerm.toLowerCase());
 
 class App extends Component {
@@ -27,7 +25,7 @@ class App extends Component {
     this.setState({ result, });
   }
 
-  conponentDidMount() {
+  componentDidMount() {
     const { searchTerm } = this.state;
 
     fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
@@ -38,8 +36,8 @@ class App extends Component {
 
   onDismiss = (id) => {
     const isNotId = item => item.objectID !== id;
-    const updatedList = this.state.list.filter(isNotId);
-    this.setState({ list: updatedList });
+    const updatedHits = this.state.result.hits.filter(isNotId);    
+    this.setState({ result: { ...this.state.result, hits: updatedHits } });
   }
 
   handleChange = (e) => {
@@ -49,9 +47,7 @@ class App extends Component {
 
   render() {
     const { result, searchTerm } = this.state;
-    if (!result) {
-      return null;
-    }
+    if (!result) { return null; }
     return (
       <div className="page">
         <div className="interactions">
@@ -116,7 +112,6 @@ const Search = ({ value, onChange, children }) => {
     </form>
   );
 }
-
 
 
 render(<App />, document.getElementById('root'));
