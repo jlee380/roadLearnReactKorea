@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { render } from 'react-dom';
 
 const DEFAULT_QUERY = 'redux';
@@ -145,7 +146,7 @@ class App extends Component {
   }
 }
 
-const Table = ({ list, onDismiss }) =>
+export const Table = ({ list, onDismiss }) =>
   <div className="table">
     {list.map((item) => {
       return (
@@ -169,7 +170,21 @@ const Table = ({ list, onDismiss }) =>
     })}
   </div>
 
-const Button = ({ onClick, className = '', children }) => {
+Table.propTypes = {
+  list: PropTypes.arrayOf(
+    PropTypes.shape({
+      objectID: PropTypes.string.isRequired,
+      author: PropTypes.string,
+      url: PropTypes.string,
+      num_comments: PropTypes.number,
+      points: PropTypes.number,
+    })
+  ).isRequired,
+
+  onDismiss: PropTypes.func.isRequired,
+};
+
+export const Button = ({ onClick, className, children }) => {
   return (
     <button
       type="submit"
@@ -181,7 +196,11 @@ const Button = ({ onClick, className = '', children }) => {
   );
 }
 
-const Search = ({ value, onChange, onSubmit, children }) => {
+Button.defaultProps = {
+  className: '',
+};
+
+export const Search = ({ value, onChange, onSubmit, children }) => {
   return (
     <form onSubmit={onSubmit}>
       <input
@@ -197,4 +216,4 @@ const Search = ({ value, onChange, onSubmit, children }) => {
 }
 
 
-render(<App />, document.getElementById('root'));
+export default App;
